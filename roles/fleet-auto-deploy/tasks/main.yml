@@ -1,0 +1,40 @@
+---
+- name: mkdir
+  file:
+    path: "{{ install_dir }}/{{ service_name }}-{{ version }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install
+  unarchive:
+    src: "{{ service_name }}-{{ version }}.zip"
+    dest: "{{ install_dir }}/{{ service_name }}-{{ version }}"
+    creates: "{{ install_dir }}/{{ service_name }}-{{ version }}/{{ service_name }}"
+    owner: root
+    group: root
+  notify:
+    - restart {{ service_name }}
+
+- name: "create {{ service_name }}.service"
+  template:
+    src: "{{ service_name }}.service.j2"
+    dest: "{{ service_dir }}/{{ service_name }}.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart {{ service_name }}
+
+- name: "link configuration file"
+  file:
+    src: "{{ fleet_auto_deploy_config }}"
+    dest: "{{ install_dir }}/{{ service_name }}-{{ version }}/config.yml"
+    state: link
+
+- name: start {{ service_name }}.service
+  systemd:
+    enabled: yes
+    state: started
+    name: "{{ service_name }}.service"

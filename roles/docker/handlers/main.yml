@@ -1,0 +1,16 @@
+---
+- name: restart docker
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker.service
+  notify:
+    - docker registry login
+
+- name: docker registry login
+  command: >-
+    docker login
+      -u {{ registry['username'] }}
+      -p {{ registry['password'] }}
+      -e none
+      "{{ registry['hostname'] }}:{{ registry['port'] }}"

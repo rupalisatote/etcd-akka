@@ -1,0 +1,13 @@
+[Unit]
+Description=Filebeat
+After=network.target docker.service
+
+[Service]
+ExecStart=/opt/filebeat-{{ filebeat_version}}-linux-x86_64/filebeat \
+  -c /opt/filebeat-{{ filebeat_version}}-linux-x86_64/filebeat.yml \
+  -d publish
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

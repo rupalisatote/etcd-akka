@@ -1,0 +1,11 @@
+[etcd]
+pocas01
+pocas02
+
+[flannel]
+pocas01
+pocas02
+
+[fleet]
+pocas01 fleet_metadata="Frontend=1,Storage=1,Processing=1,Master=1"
+pocas02 fleet_metadata="Frontend=1,Storage=1,Backend=1"

@@ -1,0 +1,14 @@
+[etcd]
+devas01
+devas02
+
+[flannel]
+devas01
+devas02
+
+[fleet]
+devas01 fleet_metadata="Frontend=1,Storage=1,Processing=1,Master=1"
+devas02 fleet_metadata="Frontend=1,Storage=1,Backend=1"
+
+[all:vars]
+fleet_auto_deploy_config="config/dev/config.yml"

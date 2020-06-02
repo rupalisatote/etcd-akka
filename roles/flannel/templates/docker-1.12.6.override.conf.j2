@@ -1,0 +1,8 @@
+[Unit]
+Requires=flannel.service
+
+[Service]
+EnvironmentFile=/run/flannel/subnet.env
+ExecStartPre=-/bin/ip addr flush docker0
+ExecStart=
+ExecStart=/usr/bin/dockerd --containerd /run/containerd/containerd.sock --add-runtime oci=/usr/bin/docker-runc $DOCKER_NETWORK_OPTIONS $DOCKER_OPTS --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU}

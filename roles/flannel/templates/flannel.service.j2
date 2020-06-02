@@ -1,0 +1,11 @@
+[Unit]
+Requires=etcd.service network-online.target
+After=etcd.service network.target network-online.target
+
+[Service]
+ExecStart=/opt/flannel-{{ version }}/flanneld --ip-masq=true
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

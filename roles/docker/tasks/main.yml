@@ -1,0 +1,19 @@
+---
+- name: create /etc/sysconfig/docker
+  template:
+    src: docker.sysconfig.j2
+    dest: /etc/sysconfig/docker
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker
+
+- name: start docker
+  systemd:
+    enabled: yes
+    state: started
+    daemon_reload: yes
+    name: docker.service
+  notify:
+    - docker registry login

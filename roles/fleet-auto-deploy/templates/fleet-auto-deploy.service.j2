@@ -1,0 +1,13 @@
+[Unit]
+Description=Fleet auto deploy
+After=network.target
+After=docker.service
+After=fleet.service
+
+[Service]
+ExecStart={{ install_dir }}/{{ service_name }}-{{ version }}/{{ service_name }}
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

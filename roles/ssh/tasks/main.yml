@@ -1,0 +1,15 @@
+---
+- name: certs installation
+  authorized_key:
+    user: "{{ item.username }}"
+    state: present
+    key: "{{ lookup('file', item.key) }}"
+  with_items:
+    - username: 'A665151'
+      key: 'A665151-1-id_rsa.pub'
+    - username: 'A665151'
+      key: 'A665151-2-id_rsa.pub'
+    - username: 'A584607'
+      key: 'A584607-1-id_rsa.pub'
+    - username: 'A584607'
+      key: 'A584607-2-id_rsa.pub'

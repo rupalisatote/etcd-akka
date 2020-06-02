@@ -1,0 +1,7 @@
+---
+proxy: proxy-git.myatos.net:8080
+registry:
+  hostname: gitncfdevop02
+  port: 5000
+  username: registry
+  password: 1ka7AcbNGLrgFj2PDOlA

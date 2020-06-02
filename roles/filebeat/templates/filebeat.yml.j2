@@ -1,0 +1,8 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /data/ncf/logs/*.log
+output.logstash:
+  hosts: {{ logstash_hosts | to_yaml }}
+  username: "elastic"
+  password: "changeme"

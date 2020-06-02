@@ -1,0 +1,35 @@
+---
+- name: install
+  unarchive:
+    src: etcd-{{ version }}-linux-amd64.tar.gz
+    dest: /opt
+    creates: /opt/etcd-{{ version }}-linux-amd64/etcd
+    owner: root
+    group: root
+  notify:
+    - restart etcd
+    - restart fleet
+
+- name: create etcd.service
+  template:
+    src: etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart etcd
+    - restart fleet
+
+- name: link etcdctl
+  file:
+    src: /opt/etcd-{{ version }}-linux-amd64/etcdctl
+    dest: /usr/bin/etcdctl
+    state: link
+
+- name: start etcd
+  systemd:
+    enabled: yes
+    state: started
+    daemon_reload: yes
+    name: etcd.service

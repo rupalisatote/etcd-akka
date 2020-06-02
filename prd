@@ -1,0 +1,20 @@
+[etcd]
+prdas01
+prdas02
+prdas03
+prdas04
+
+[flannel]
+prdas01
+prdas02
+prdas03
+prdas04
+
+[fleet]
+prdas01 fleet_metadata="Frontend=1, Master=1, Storage=1"
+prdas02 fleet_metadata="Frontend=1, Processing=1, Storage=1"
+prdas03 fleet_metadata="Backend=1, Processing=1, Storage=1"
+prdas04 fleet_metadata="Backend=1"
+
+[all:vars]
+fleet_auto_deploy_config="config/prd/config.yml"

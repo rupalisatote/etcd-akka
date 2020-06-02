@@ -1,0 +1,23 @@
+[etcd]
+stgas01
+stgas02
+stgas03
+stgas04
+stgdb01
+
+[flannel]
+stgas01
+stgas02
+stgas03
+stgas04
+stgdb01
+
+[fleet]
+stgas01 fleet_metadata="Frontend=1, Master=1, Storage=1"
+stgas02 fleet_metadata="Frontend=1, Processing=1, Storage=1"
+stgas03 fleet_metadata="Backend=1, Processing=1, Storage=1"
+stgas04 fleet_metadata="Backend=1"
+stgdb01 fleet_metadata="Storage=1"
+
+[all:vars]
+fleet_auto_deploy_config="config/stg/config.yml"

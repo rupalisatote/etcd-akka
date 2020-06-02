@@ -1,0 +1,24 @@
+---
+- name: mkdir
+  file:
+    path: /opt/janitor-{{ janitor_version }}
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install
+  unarchive:
+    src: janitor-{{ janitor_version }}.tar.xz
+    dest: /opt/janitor-{{ janitor_version }}
+    creates: /opt/janitor-{{ janitor_version }}/janitor
+    owner: root
+    group: root
+
+- name: create janitor cron script
+  template:
+    src: janitor.cron.j2
+    dest: /etc/cron.daily/janitor
+    owner: root
+    group: root
+    mode: 0755

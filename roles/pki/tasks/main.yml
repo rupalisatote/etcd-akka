@@ -1,0 +1,15 @@
+---
+- name: Certs installation
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: root
+    group: root
+    mode: 0444
+  with_items:
+    - src: 'ca.cert.pem'
+      dest: '/etc/pki/trust/anchors/ca.cert.pem'
+    - src: 'intermediate.cert.pem'
+      dest: '/etc/pki/trust/anchors/intermediate.cert.pem'
+  notify:
+    - update-ca-certificates

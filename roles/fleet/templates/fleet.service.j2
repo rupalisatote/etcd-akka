@@ -1,0 +1,28 @@
+[Unit]
+Description=fleet service
+After=etcd.service fleet.socket
+Wants=fleet.socket
+Requires=etcd.service
+
+{% macro etcd_servers() -%}
+{% for host in groups['all'] -%}
+{% if loop.last -%}
+http://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{ etcd_port }}
+{%- else -%}
+http://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{ etcd_port }},
+{%- endif -%}
+{% endfor -%}
+{% endmacro -%}
+
+[Service]
+Environment="FLEET_ETCD_SERVERS={{ etcd_servers() }}"
+Environment="FLEET_METADATA={{ fleet_metadata }}"
+Environment="FLEET_ETCD_REQUEST_TIMEOUT=5.0"
+Environment="FLEET_ENGINE_RECONCILE_INTERVAL=10"
+Environment="FLEET_AGENT_TTL=120s"
+ExecStart=/opt/fleet-{{ version }}-linux-amd64/fleetd
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

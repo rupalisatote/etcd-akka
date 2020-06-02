@@ -1,0 +1,12 @@
+---
+- name: restart etcd
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: etcd.service
+
+- name: restart fleet
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: fleet.service

@@ -1,0 +1,36 @@
+[Unit]
+Description=etcd
+Requires=network-online.target
+After=network.target network-online.target
+
+{% macro initial_cluster() -%}
+{% for host in groups['all'] -%}
+{% if loop.last -%}
+{{ host }}=http://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{ peer_port }}
+{%- else -%}
+{{ host }}=http://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:{{ peer_port }},
+{%- endif -%}
+{% endfor -%}
+{% endmacro -%}
+
+{%- macro public_ip() -%}
+{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+{%- endmacro -%}
+
+[Service]
+Type=notify
+ExecStart=/opt/etcd-{{ version }}-linux-amd64/etcd \
+    -data-dir {{ data_directory }} \
+    -name {{ inventory_hostname }} \
+    -initial-advertise-peer-urls http://{{ public_ip() }}:{{ peer_port }} \
+    -listen-peer-urls http://{{ public_ip() }}:{{ peer_port }} \
+    -initial-cluster-token {{ cluster_token }} \
+    -initial-cluster {{ initial_cluster() }} \
+    -initial-cluster-state new \
+    -listen-client-urls http://{{ public_ip() }}:{{ client_port }},http://localhost:{{ client_port }} \
+    -advertise-client-urls http://{{ public_ip() }}:{{ client_port }}
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

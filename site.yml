@@ -1,0 +1,10 @@
+---
+- hosts: all
+  roles:
+    - pki
+    - flannel
+    - docker
+    - etcd
+    - fleet
+    - fleet-auto-deploy
+    - janitor

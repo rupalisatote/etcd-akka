@@ -1,0 +1,42 @@
+---
+- name: install
+  unarchive:
+    src: fleet-{{ version }}-linux-amd64.tar.gz
+    dest: /opt
+    creates: /opt/fleet-{{ version }}-linux-amd64/fleetd
+    owner: root
+    group: root
+  notify:
+    - restart fleet
+
+- name: create fleet.service
+  template:
+    src: fleet.service.j2
+    dest: /etc/systemd/system/fleet.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart fleet
+
+- name: create fleet.socket
+  template:
+    src: fleet.socket.j2
+    dest: /etc/systemd/system/fleet.socket
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart fleet
+
+- name: link fleetctl
+  file:
+    src: /opt/fleet-{{ version }}-linux-amd64/fleetctl
+    dest: /usr/bin/fleetctl
+    state: link
+
+- name: start fleet
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: fleet.service
